@@ -15,9 +15,12 @@ class CreateDownvotesPostPivotTable extends Migration
     {
         Schema::create('downvotes_post_pivot', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('post_id');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('post_id');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('post_id')->references('id')->on('posts')->cascadeOnDelete();
         });
     }
 

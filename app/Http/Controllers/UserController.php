@@ -20,14 +20,22 @@ class UserController extends Controller
     public function show(User $user){
         return response()->json(['message' => 'success', 'user' => $user], 200);
     }
+    public function store(Request $request){
+        // dd($request->all());
+        $data = $request->validate([
+            'name' => 'required|string|max:40',
+            'email' => 'required|unique:users,email',
+            'password' => 'required|min:3|max:30',
+        ]);
+        
+            // dd($data);
+        $data['password'] = bcrypt($data['password']);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
+        if($user = User::create($data)){
+            return response()->json(['message' => 'success', 'user' => $user], 200);
+        }
+    }
+
     public function update(Request $request, User $user)
     {
         $data = $request->validate([
@@ -52,5 +60,9 @@ class UserController extends Controller
         if($user->delete()){
             return response()->json(['message' => 'success'], 200);
         }
+    }
+
+    public function savePost(Request $request){
+        return $user->savePost()->attach($post->id);
     }
 }

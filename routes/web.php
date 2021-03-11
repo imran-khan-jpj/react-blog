@@ -15,12 +15,12 @@ use App\Http\Controllers\Auth\LoginController;
 */
 
 Route::get('/', function () { return view('welcome'); });
-
+// dd('we are here');
 // Auth::routes();
 Route::post('/login', [LoginController::class, 'login']);
 // Route::middleware('auth:sanctum')->group(function(){
 // 	Route::post('/logout', [LoginController::class, 'logout']);
 // });
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });

@@ -4,17 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Comment;
-use Category;
 
 class Post extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'description', 'category_id', 'user_id'];
+    protected $fillable = ['title', 'description', 'category_id', 'user_id', 'image'];
     public function comments(){
+        // dd(Comment::class);
     	return $this->hasMany(Comment::class);
     }
-
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
     public function category(){
     	return $this->belongsTo(Category::class);
     }
@@ -33,6 +34,16 @@ class Post extends Model
         return $this->belongsToMany(User::class, 'post_upvotes_pivot');
     }
     public function downvoteBy(){
-        return $this->belongsToMany(User::class, 'post_downvotes_pivot');
+        return $this->belongsToMany(User::class, 'downvotes_post_pivot');
     }
+
+    public function postReport(){
+        return $this->belongsToMany(User::class, 'post_report_pivot');
+    }
+
+    public function postSave(){
+        return $this->belongsToMany(User::class, 'post_save_pivot');
+    }
+
+    
 }

@@ -36,10 +36,18 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        // $this->middleware('guest')->except('logout');
     }
 
     public function login(Request $request){
+        if(auth()->check()){
+            Auth::guard('web')->logout();
+            if(Auth::attempt($request->only('email', 'password'))){
+                return response()->json(['res' => 'success', 'user' => User::where('email', $request->email)->first()], 200);
+            }
+        }
+
+
         if(Auth::attempt($request->only('email', 'password'))){
             return response()->json(['res' => 'success', 'user' => User::where('email', $request->email)->first()], 200);
         }else{
@@ -49,20 +57,11 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        $user = $request->user();
-        // if($user->tokens()->delete()){
-        //  return response()->json(['res' => 'logouted'], 200);   
-        // }
-       
-        return response()->json(['res' => $user->tokens], 200);
-        // $user->tokens()->where('id', $id)->delete();
-        // Auth::logout();
+        // dd('inside of logout method');
+        Auth::guard('web')->logout();
 
-        // $request->session()->invalidate();
-
-        // $request->session()->regenerateToken();
-
-        //     return response()->json(['res' => 'loggedOut'], 200);
+        return response()->json(['res' => 'success'], 200);
+        
     }
 
 
